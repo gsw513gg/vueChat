@@ -4,12 +4,10 @@ import router from './scripts/router.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
 import VueCookies from 'vue-cookies'
 import BootstrapVue from 'bootstrap-vue'
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.use(VueAxios,axios)
 Vue.config.productionTip = false

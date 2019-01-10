@@ -40,4 +40,7 @@ h1 {
 a {
   text-decoration: none;
 }
+a:hover {
+  text-decoration: none;
+}
 </style>
