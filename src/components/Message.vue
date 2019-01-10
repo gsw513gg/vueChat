@@ -11,7 +11,7 @@
 <script>
 import TopHeader from './TopHeader.vue'
 import Foot from './Foot.vue'
-
+ 
 
 export default {
   name: 'index',
