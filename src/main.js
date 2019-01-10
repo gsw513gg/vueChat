@@ -6,12 +6,16 @@ import VueAxios from 'vue-axios'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueCookies from 'vue-cookies'
+import BootstrapVue from 'bootstrap-vue'
 
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.use(VueAxios,axios)
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueCookies)
+Vue.use(BootstrapVue)
 axios.defaults.baseURL = 'http://gsw513gg.gz01.bdysite.com/api/'
 // axios.defaults.withCredentials = true;//允许axios带cookie
 

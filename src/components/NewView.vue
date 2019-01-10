@@ -34,7 +34,7 @@
             </div>
           </li>
         </ul>
-        <span class="loadmore" @click="loadmore" v-if="commentLength != end">加载更多</span>
+        <span class="loadmore" @click="loadmore" v-if="commentLength != end && commentArray.length > 10">加载更多</span>
         <span class="loadend" v-else>已经到底了鸭!</span>
       </div>
     </section>
@@ -64,6 +64,7 @@ export default {
       end: 10,
       newsview: {},
       comments: [],
+      commentArray:[],
       userid:this.$cookies.get("userId"),
       editorContent: "",
       username:this.$cookies.get("username")
@@ -104,6 +105,7 @@ export default {
       this.axios
         .get("getchatAll.php?chatId=" + this.id)
         .then(res => {
+          this.commentArray = res.data.message
           this.commentLength = res.data.message.length;
           this.newsview = res.data.message[0];
           this.comments = res.data.message
@@ -121,7 +123,6 @@ export default {
       this.editorContent = html;
     };
     editor.create();
-    
   },
   components: {
     TopHeader,

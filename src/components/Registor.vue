@@ -19,7 +19,8 @@
           <label v-rainbow>确认密码</label>
           <input class="user_name" name="password" type="password" v-model="checkpassword">
         </div>
-        <button class="btn_registor" type="button" @click="addUser">注册</button>
+        <el-alert :title="errorAlert" type="error" v-if="errorBoolean" @close="error"></el-alert>
+        <el-button class="btn_registor" type="button" @click="addUser">注册</el-button>
       </form>
     </div>
   </div>
@@ -37,26 +38,32 @@ export default {
       checkpassword: "",
       baseData: {
         src: null
-      }
+      },
+      errorAlert: "",
+      errorBoolean: false
     };
   },
   methods: {
+    error(){
+      this.errorBoolean = false
+    },
     upload(e) {
       var that = this;
       var file = e.target.files[0];
       var reader = new FileReader();
       reader.readAsDataURL(file);
-      console.log(this);
       reader.onload = function() {
         that.baseData.src = reader.result;
       };
     },
     addUser() {
       if (this.password == "" || this.checkpassword == "") {
-        alert("输入密码或确认密码不能为空");
+        this.errorBoolean = true;
+        this.errorAlert = "输入密码或确认密码不能为空";
         return false;
       } else if (this.password != this.checkpassword) {
-        alert("输入密码或确认密码不能相同");
+        this.errorBoolean = true;
+        this.errorAlert = "输入密码或确认密码不能相同";
         return false;
       }
       var postData = {
@@ -68,9 +75,16 @@ export default {
       this.axios
         .post("registerSave.php", Qs.stringify(postData))
         .then(res => {
-          alert(res.data.message);
           if (res.data.message == "注册成功") {
-            this.$router.push({ path: "/login" });
+            this.$alert("注册成功", "恭喜", {
+              confirmButtonText: "确定",
+              callback: action => {
+                this.$router.push({ path: "/login" });
+              }
+            });
+          } else {
+            this.errorAlert = res.data.message;
+            this.errorBoolean = true;
           }
         })
         .catch(error => {
@@ -125,7 +139,7 @@ export default {
   width: 20%;
   height: 100%;
   font-size: 24px;
-  text-align: center;
+  text-align: left;
   line-height: 50px;
 }
 .form_control input {
@@ -155,5 +169,8 @@ export default {
 }
 .btn_registor:hover {
   background: rgb(93, 109, 204);
+}
+.el-alert{
+  margin: 20px auto;
 }
 </style>

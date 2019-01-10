@@ -11,10 +11,9 @@
           <label v-rainbow>密码</label>
           <input type="password" v-model="password">
         </div>
-        <input class="btn_login" type="button" value="登录" @click="loginClick">
-        <router-link to="/registor">
-          <input class="btn_registor" type="button" value="注册">
-        </router-link>
+        <el-alert :title="loginMessage" type="error" v-if="loginBoolean" @close="close"></el-alert>
+        <el-button type="primary" @click="loginClick">登录</el-button>
+        <router-link to="/registor" class="btn_registor">注册</router-link>
       </form>
     </div>
   </div>
@@ -23,33 +22,45 @@
 <script>
 import Qs from "qs";
 
-
 export default {
   name: "login",
-  data(){
+  data() {
     return {
-      username:'',
-      password:''
-    }
+      username: "",
+      password: "",
+      loginMessage: "",
+      loginBoolean: false
+    };
   },
-  methods:{
-    loginClick(){
-      let loginMessge = {
-        username:this.username,
-        password:this.password,
-        send:1
-      }
-      this.axios.post('loginSave.php',Qs.stringify(loginMessge))
-      .then((res) => {
-        alert(res.data.message)
-        if(res.data.message == "登陆成功"){
-          this.$router.push({path:"/index"})
-        }
-      })
-      .catch((error) => {
-        alert(error)
-      })
+  methods: {
+    close() {
+      this.loginBoolean = false;
     },
+    loginClick() {
+      this.loginBoolean = true;
+      let loginMessge = {
+        username: this.username,
+        password: this.password,
+        send: 1
+      };
+      this.axios
+        .post("loginSave.php", Qs.stringify(loginMessge))
+        .then(res => {
+          if (res.data.message == "登陆成功") {
+            this.$alert("登陆成功", "恭喜", {
+              confirmButtonText: "确定",
+              callback: action => {
+                this.$router.push({ path: "/index" });
+              }
+            });
+          } else {
+            this.loginMessage = res.data.message;
+          }
+        })
+        .catch(error => {
+          alert(error);
+        });
+    }
   }
 };
 </script>
@@ -60,7 +71,7 @@ export default {
   margin: 200px auto;
   padding: 50px;
 }
-.login_title{
+.login_title {
   height: 80px;
   line-height: 80px;
   text-align: center;
@@ -75,7 +86,7 @@ export default {
   width: 20%;
   height: 100%;
   font-size: 24px;
-  text-align: center;
+  text-align: left;
   line-height: 50px;
 }
 .form_control input {
@@ -88,30 +99,36 @@ export default {
   border-radius: 5px;
   box-shadow: 1px 1px 5px #888;
 }
-.btn_registor,
-.btn_login {
+.btn_registor {
   display: block;
   width: 400px;
   height: 50px;
   border: none;
   outline: none;
-  background: rgb(10, 133, 248);
+  background: rgb(181, 10, 248);
   margin: 20px auto;
   color: #fff;
   font-size: 18px;
   border-radius: 5px;
   cursor: pointer;
-  box-shadow: 2px 2px 5px #888;
-  transition: 0.5s
-}
-.btn_registor:hover{
-  background: rgb(90, 106, 197);
+  transition: 0.5s;
+  text-align: center;
+  line-height: 50px;
+  text-decoration: none;
 }
 
-.btn_login{
-  background: rgb(8, 223, 105);
+.btn_registor:hover {
+  background: rgb(206, 12, 245);
 }
-.btn_login:hover{
-  background: rgb(49, 240, 182);
+.el-button {
+  width: 400px;
+  height: 50px;
+  margin: 0 auto;
+  display: block;
+  font-size: 18px;
+  transition: 0.5s;
+}
+.el-alert {
+  margin: 20px auto;
 }
 </style>
